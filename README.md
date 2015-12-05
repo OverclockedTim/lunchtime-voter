@@ -7,6 +7,7 @@ Lunchtime Voter is a primarily two things - fun project for teams and weekend ex
 * Typescript as web client language
 * Angular 2 as framework
 * Firebase as database
+* Possibly Materialize.css as CSS framework?  I can't find a lot that really works well with Angular 2 just yet.
 
 ### Possible Future Technologies
 
