@@ -25,7 +25,17 @@ will know what I'm talking about :)  So this is just a quick way to get together
 Everyone gets to submit one idea for lunch. Everyone else votes on an idea.  The idea with the highest common point total wins,
 and the group goes there for lunch.
 
-TODO: Add some pics of the design prototype.
+### Prototype Idea Pics
+
+![1. Set a Deadline](design/1_ Deadline.png)
+
+![2. Invite](design/2_ Invite.png)
+
+![3. Pick a Time](design/3_ Pick a Time.png)
+
+![4. Pick a Place](design/4_ Pick a Place.png)
+
+![5. Lunching](design/5_Lunching.png)
 
 ## Contributing
 
