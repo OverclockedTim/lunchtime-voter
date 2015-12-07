@@ -243,3 +243,9 @@ We have good experience using these editors:
 * Why am I getting lots of warnings when starting the repo?
 * You need to run `tsd install` this happens when tsd didn't install correctly or at all
 
+# Data Design
+
+An example, MVP Data Design doc is now included to help everybody get an idea of the layout in firebase.  This is a simplest-possible-case data design.
+
+![1. Data Design](design/data_design.png)
+
