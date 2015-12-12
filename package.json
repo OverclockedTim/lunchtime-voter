@@ -18,24 +18,18 @@
     "e2e": "protractor",
     "ci": "npm run e2e && npm run test",
     "test": "karma start",
-    "docs": "typedoc  --options typedoc.json  src/**/*.ts",
     "start": "npm run server"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/angularclass/angular2-webpack-starter.git"
+    "url": "https://github.com/OverclockedTim/lunchtime-voter.git"
   },
-  "author": "Patrick Stapleton <patrick@angularclass.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/angularclass/angular2-webpack-starter/issues"
-  },
-  "homepage": "https://github.com/angularclass/angular2-webpack-starter",
+  "homepage": "https://github.com/OverclockedTim/lunchtime-voter",
   "dependencies": {
     "@reactivex/rxjs": "5.0.0-alpha.14",
     "angular2": "2.0.0-alpha.52",
     "es6-promise": "^3.0.2",
-    "es6-shim": "0.33.3",
+    "es6-shim": "0.33.13",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-alpha.14",
     "zone.js": "0.5.8"
