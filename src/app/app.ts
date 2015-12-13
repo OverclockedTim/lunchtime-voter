@@ -4,6 +4,7 @@
 import {Directive, Component, ElementRef} from 'angular2/angular2';
 import {RouteConfig, Router} from 'angular2/router';
 import {Http, Headers} from 'angular2/http';
+import {FirebaseEventPipe} from './firebase/firebasepipe';
 
 /*
  * Angular Directives
@@ -44,6 +45,11 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
   <div class="container">
     <br/>
     <div>Add your suggestion or vote on other people's suggestions until 11:30.  At 11:30, voting stops and a spot is chosen!</div>
+
+    <div class="row">
+      <a class="waves-effect waves-light btn" (click)="authenticateWithGoogle()" >Sign In With Google</a>
+    </div>
+
     <h4>Add a Lunch Option</h4>
     <form class="col s12">
       <div class="row">
@@ -107,12 +113,30 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
   `
 })
 export class App {
-  // These are member type
-  title: string;
-  data: Array<any> = []; // default data
-  // TypeScript public modifiers
+  firebaseUrl: string;
+  firebaseRef: Firebase;
+  isLoggedIn: boolean;
+  authData: any;
   constructor() {
-    this.title = 'Thai Siam';
+
+    this.firebaseUrl = "https://lunchtimevoter.firebaseio.com/";
+    this.firebaseRef = new Firebase(this.firebaseUrl);
+    this.firebaseRef.onAuth((user) => {
+      if (user) {
+        this.authData = user;
+        this.isLoggedIn = true;
+        console.log("user logged in.");
+      }
+    });
+
+  }
+
+  authenticateWithGoogle(){
+    this.firebaseRef.authWithOAuthPopup("google", (error) => {
+      if(error){
+        console.log(error); // todo improve error handling
+      }
+    });
   }
 }
 

@@ -13,6 +13,9 @@
     "outDir": "dist"
   },
   "files": [
-    "src/app/bootstrap.ts"
+    "src/app/bootstrap.ts",
+    "src/app/app.ts",
+    "src/app/firebase/firebasepipe.ts",
+    "src/app/firebase/firebase.d.ts"
   ]
 }
