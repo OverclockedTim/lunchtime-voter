@@ -5,6 +5,7 @@ import {Directive, Component, ElementRef} from 'angular2/core';
 import {RouteConfig, Router} from 'angular2/router';
 import {Http, Headers} from 'angular2/http';
 import {FirebaseEventPipe} from './firebase/firebasepipe';
+import {NgIf} from 'angular2/common';
 
 /*
  * Angular Directives
@@ -37,30 +38,32 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
   template: `
   <nav class="top-nav">
     <div class="container">
-      <div class="nav-wrapper">Lunchtime Voter</div>
-
+      <div class="nav-wrapper"><div class="right" *ngIf="isLoggedIn"><a (click)="signOut()">Sign Out</a></div>Lunchtime Voter</div>
     </div>
   </nav>
 
-  <div class="container">
+  <div class="container" *ngIf="!isLoggedIn">
     <br/>
-    <div>Add your suggestion or vote on other people's suggestions until 11:30.  At 11:30, voting stops and a spot is chosen!</div>
-
-    <div class="row">
+    <div *ngIf="!isLoggedIn" class="center row">
       <a class="waves-effect waves-light btn" (click)="authenticateWithGoogle()" >Sign In With Google</a>
     </div>
+  </div>
+
+  <div class="container" *ngIf="isLoggedIn">
+    <br/>
+    <div>Add your suggestion or vote on other people's suggestions until 11:30.  At 11:30, voting stops and a spot is chosen!</div>
 
     <h4>Add a Lunch Option</h4>
     <form class="col s12">
       <div class="row">
         <div class="input-field col s6">
-          <input placeholder="Thai Siam" id="title" type="text" class="validate">
+          <input placeholder="" id="title" type="text" class="validate">
           <label for="title">Title</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input placeholder="It's awesome and I love it." id="description" type="text" class="validate">
+          <input placeholder="" id="description" type="text" class="validate">
           <label for="description">Description / Selling It</label>
         </div>
       </div>
@@ -137,6 +140,12 @@ export class App {
         console.log(error); // todo improve error handling
       }
     });
+  }
+
+  signOut(){
+    console.log('Signing out...');
+    this.firebaseRef.unauth();
+    this.isLoggedIn = false;
   }
 }
 
