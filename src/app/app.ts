@@ -1,7 +1,6 @@
 import {Directive, Component, ElementRef} from 'angular2/core';
 import {RouteConfig, Router} from 'angular2/router';
 import {Http, Headers} from 'angular2/http';
-import {FirebaseEventPipe} from './firebase/firebasepipe';
 import {NgIf, NgModel} from 'angular2/common';
 
 import {ROUTER_DIRECTIVES} from 'angular2/router';
@@ -78,6 +77,11 @@ declare var Materialize: any;
     </div>
 
     <h4>Rate other people's suggestions</h4>
+
+    <li *ngFor="#suggestion of groupChoices">
+      <strong>{{suggestion.title}}</strong>: {{suggestion.description}}
+    </li>
+
     <table class="bordered">
         <thead>
           <tr>
@@ -124,12 +128,13 @@ export class App {
   firebaseRef: Firebase;
   userRef: Firebase;
   mySuggestionRef: Firebase;
-  groupSuggestionsRef: Firebase;
   isLoggedIn: boolean;
   authData: any;
   hasSuggestion: boolean;
   mySuggestionTitle: String = "";
-  mySuggestionDescription: String = "BOOGERS";
+  mySuggestionDescription: String = "";
+  groupChoicesRef: Firebase;
+  groupChoices =  new Array<String >();
   constructor() {
     this.firebaseUrl = "https://lunchtimevoter.firebaseio.com/";
     this.firebaseRef = new Firebase(this.firebaseUrl);
@@ -151,7 +156,11 @@ export class App {
         });
 
         //Setup Group Suggestions Ref
-        this.groupSuggestionsRef = new Firebase(this.firebaseUrl + "groups/default/choices/");
+        this.groupChoicesRef = new Firebase(this.firebaseUrl + "groups/default/choices/");
+        this.groupChoicesRef.on("value",this.onGroupChoicesChanged.bind(this), function (errorObject) {
+          console.log("The read failed: " + errorObject.code);
+        });
+
       }
     });
   }
@@ -179,6 +188,10 @@ export class App {
       this.mySuggestionTitle = myFirebaseSuggestion.title;
       this.mySuggestionDescription = myFirebaseSuggestion.description;
     }
+  }
+
+  onGroupChoicesChanged(snapshot){
+    console.log('TODO: Do something about rendering group choices: ' + JSON.stringify(snapshot.val()));
   }
 
   authenticateWithGoogle(){
