@@ -78,10 +78,6 @@ declare var Materialize: any;
 
     <h4>Rate other people's suggestions</h4>
 
-    <li *ngFor="#suggestion of groupChoices">
-      <strong>{{suggestion.title}}</strong>: {{suggestion.description}}
-    </li>
-
     <table class="bordered">
         <thead>
           <tr>
@@ -92,19 +88,9 @@ declare var Materialize: any;
         </thead>
 
         <tbody>
-          <tr>
-            <td>Thai Siam</td>
-            <td>The best Thai Food In the World</td>
-            <td>
-              <i style="color: #f5f5f5" class="material-icons dp48">star</i>
-              <i style="color: #f5f5f5" class="material-icons dp48">star</i>
-              <i style="color: #f5f5f5" class="material-icons dp48">star</i>
-              <i style="color: #f5f5f5" class="material-icons dp48">star</i>
-            </td>
-          </tr>
-          <tr>
-            <td>Not Thai Siam</td>
-            <td>Really Bad Thai Food</td>
+          <tr *ngFor="#suggestion of groupChoices">
+            <td>{{suggestion.title}}</td>
+            <td>{{suggestion.description}}</td>
             <td>
               <i style="color: #f5f5f5" class="material-icons dp48">star</i>
               <i style="color: #f5f5f5" class="material-icons dp48">star</i>
@@ -134,7 +120,7 @@ export class App {
   mySuggestionTitle: String = "";
   mySuggestionDescription: String = "";
   groupChoicesRef: Firebase;
-  groupChoices =  new Array<String >();
+  groupChoices =  [];
   constructor() {
     this.firebaseUrl = "https://lunchtimevoter.firebaseio.com/";
     this.firebaseRef = new Firebase(this.firebaseUrl);
@@ -191,7 +177,38 @@ export class App {
   }
 
   onGroupChoicesChanged(snapshot){
-    console.log('TODO: Do something about rendering group choices: ' + JSON.stringify(snapshot.val()));
+    // This is going to come back as an associative array of choices vs user ID.
+    // However, angular 2 does not support iterating over an associative array, so
+    // we must first sort this into an array and then set it to this.groupChoices
+    // which is the variable that the template is using to render the choices.
+
+    function keys(obj)
+    {
+      var keys = [];
+
+      for(var key in obj)
+      {
+        if(obj.hasOwnProperty(key))
+        {
+          keys.push(key);
+        }
+      }
+
+      return keys;
+    }
+
+    //By sorting the keys first, we make the order reliable for rendering.
+    var groupChoicesKeysArray = keys(snapshot.val()).sort();
+
+
+    var groupChoicesArray = [];
+
+    for (var choice of groupChoicesKeysArray){
+      groupChoicesArray.push(snapshot.val()[choice]);
+    }
+
+    this.groupChoices = groupChoicesArray;
+
   }
 
   authenticateWithGoogle(){
