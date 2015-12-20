@@ -55,22 +55,8 @@ module.exports = {
 
   //
   entry: {
-    'angular2': [
-      // Angular 2 Deps
-      '@reactivex/rxjs',
-      'zone.js/dist/zone-microtask',
-      'reflect-metadata',
-      // to ensure these modules are grouped together in one file
-      'angular2/platform/browser',
-      'angular2/common',
-      'angular2/core',
-      'angular2/router',
-      'angular2/http'
-    ],
-    'app': [
-      // App
-      './src/app/bootstrap'
-    ]
+    'vendor': './src/app/vendor.ts',
+    'app': './src/app/bootstrap',
   },
 
   // Config for our build files
@@ -110,24 +96,16 @@ module.exports = {
       { test: /\.ts$/,    loader: 'ts',
         query: {
           'ignoreDiagnostics': [
-            // 2300, // 2300 -> Duplicate identifier
-            // 2309 // 2309 -> An export assignment cannot be used in a module with other exported elements.
+            2403, // 2403 -> Subsequent variable declarations
+            2300, // 2300 -> Duplicate identifier
+            2374, // 2374 -> Duplicate number index signature
+            2375  // 2375 -> Duplicate string index signature
           ]
         },
-        exclude: [
-          /\.min\.js$/,
-          /\.spec\.ts$/,
-          /\.e2e\.ts$/,
-          /node_modules/,
-          /zone\.js\/dist\/zone-microtask/
-
-        ]
+        exclude: [ /\.(spec|e2e)\.ts$/, /node_modules\/(?!(ng2-.+))/ ]
       }
     ],
-    noParse: [
-      /rtts_assert\/src\/rtts_assert/,
-      /reflect-metadata/
-    ]
+    noParse: [ /.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/ ]
   },
 
   plugins: [
@@ -138,9 +116,9 @@ module.exports = {
     new OccurenceOrderPlugin(),
     new DedupePlugin(),
     new CommonsChunkPlugin({
-      name: 'angular2',
+      name: 'vendor',
       minChunks: Infinity,
-      filename: 'angular2.js'
+      filename: 'vendor.js'
     }),
     new CommonsChunkPlugin({
       name: 'common',
