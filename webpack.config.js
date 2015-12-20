@@ -58,7 +58,7 @@ module.exports = {
     'angular2': [
       // Angular 2 Deps
       '@reactivex/rxjs',
-      'zone.js',
+      'zone.js/dist/zone-microtask',
       'reflect-metadata',
       // to ensure these modules are grouped together in one file
       'angular2/platform/browser',
@@ -118,7 +118,9 @@ module.exports = {
           /\.min\.js$/,
           /\.spec\.ts$/,
           /\.e2e\.ts$/,
-          /node_modules/
+          /node_modules/,
+          /zone\.js\/dist\/zone-microtask/
+
         ]
       }
     ],
