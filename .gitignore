@@ -41,10 +41,11 @@ Thumbs.db
 
 # Dist #
 /dist
-/public/__build__/
-/src/*/__build__/
+/public/**
+/src/*/build/
 __build__/**
 .webpack.json
+firebase.json
 
 #doc
 /doc

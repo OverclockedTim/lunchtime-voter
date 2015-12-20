@@ -50,7 +50,7 @@ module.exports = {
     colors: true,
     historyApiFallback: true,
     contentBase: 'src/public',
-    publicPath: '/__build__'
+    publicPath: '/build'
   },
 
   //
@@ -69,23 +69,13 @@ module.exports = {
     ],
     'app': [
       // App
-
-      // './examples/  /bootstrap' <-- view examples
-
-      // './examples/rx-autosuggest/bootstrap'
-      // './examples/rx-draggable/bootstrap'
-      // './examples/rx-timeflies/bootstrap'
-      // './examples/game-tictactoe/bootstrap'
-      // './examples/simple-component/bootstrap'
-      // './examples/simple-todo/bootstrap'
-
       './src/app/bootstrap'
     ]
   },
 
   // Config for our build files
   output: {
-    path: root('__build__'),
+    path: root('src/public/build'),
     filename: '[name].js',
     sourceMapFilename: '[name].js.map',
     chunkFilename: '[id].chunk.js'

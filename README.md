@@ -149,7 +149,7 @@ npm run server # or either webpack-dev-server or npm run express
 ```
 
 ## Other commands 
-
+fire
 ### build files
 ```bash
 npm run build  # or webpack
@@ -176,14 +176,11 @@ npm run webdriver-start  # or webdriver-manager start
 npm run e2e  # or protractor
 ```
 
-# Contributing
-You can include more examples as components but they must introduce a new concept such as `Home` component (separate folders), and Todo (services). I'll accept pretty much everything so feel free to open a Pull-Request
-
 # TypeScript
 > To take full advantage of TypeScript with autocomplete you would have to install it globally and use an editor with the correct TypeScript plugins.
 
 ## Use latest TypeScript compiler
-TypeScript 1.5 includes everything you need. Make sure to upgrade, even if you installed TypeScript previously.
+Make sure to upgrade, even if you installed TypeScript previously.
 
 ```
 npm install --global typescript
@@ -227,3 +224,7 @@ An example, MVP Data Design doc is now included to help everybody get an idea of
 
 ![1. Data Design](design/data_design.png)
 
+
+#Deploy your own
+
+https://<yourfirebase>.firebaseio.com/?page=Hosting

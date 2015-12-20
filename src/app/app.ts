@@ -104,7 +104,7 @@ declare var Materialize: any;
           </tr>
           <tr>
             <td>Not Thai Siam</td>
-            <td>Bad Thai Food</td>
+            <td>Really Bad Thai Food</td>
             <td>
               <i style="color: #f5f5f5" class="material-icons dp48">star</i>
               <i style="color: #f5f5f5" class="material-icons dp48">star</i>
