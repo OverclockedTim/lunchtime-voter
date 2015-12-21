@@ -92,10 +92,37 @@ declare var Materialize: any;
             <td>{{suggestion.title}}</td>
             <td>{{suggestion.description}}</td>
             <td>
-              <i style="color: #f5f5f5" class="material-icons dp48">star</i>
-              <i style="color: #f5f5f5" class="material-icons dp48">star</i>
-              <i style="color: #f5f5f5" class="material-icons dp48">star</i>
-              <i style="color: #f5f5f5" class="material-icons dp48">star</i>
+              <i [style.color]="getRatingColor(suggestion,1)"
+              class="material-icons dp48"
+              (click)="clickStar(suggestion,1)"
+              (mouseleave)="mouseLeaveStar(suggestion,1)"
+              (mouseenter)="mouseEnterStar(suggestion,1)">
+                star
+              </i>
+
+              <i [style.color]="getRatingColor(suggestion,2)"
+              class="material-icons dp48"
+              (click)="clickStar(suggestion,2)"
+              (mouseleave)="mouseLeaveStar(suggestion,2)"
+              (mouseenter)="mouseEnterStar(suggestion,2)">
+                star
+              </i>
+
+              <i [style.color]="getRatingColor(suggestion,3)"
+              class="material-icons dp48"
+              (click)="clickStar(suggestion,3)"
+              (mouseleave)="mouseLeaveStar(suggestion,3)"
+              (mouseenter)="mouseEnterStar(suggestion,3)">
+                star
+              </i>
+
+              <i [style.color]="getRatingColor(suggestion,4)"
+              class="material-icons dp48"
+              (click)="clickStar(suggestion,4)"
+              (mouseleave)="mouseLeaveStar(suggestion,4)"
+              (mouseenter)="mouseEnterStar(suggestion,4)">
+                star
+               </i>
             </td>
           </tr>
         </tbody>
@@ -151,6 +178,40 @@ export class App {
     });
   }
 
+  mouseEnterStar(suggestion,numStars){
+    suggestion.hoverLevel = numStars;
+  }
+
+  mouseLeaveStar(suggestion){
+    suggestion.hoverLevel = 0;
+  }
+
+  clickStar(suggestion,numStars){
+    suggestion.myRating = numStars;
+
+    var ratingRef = this.groupChoicesRef.child(suggestion.key + "/rating/" + this.authData.uid);
+
+    ratingRef.set(numStars);
+
+
+  }
+
+  getRatingColor(suggestion,starNumber){
+    if (suggestion.hoverLevel > 0 ){
+      if (suggestion.hoverLevel >= starNumber) {
+        return '#EFB200';
+      }
+    }
+    else{
+      if (suggestion.myRating >= starNumber){
+        return '#EFB200';
+      }
+    }
+
+
+    return '#f5f5f5';
+  }
+
   setMySuggestion(suggestionTitle,suggestionDescription){
     if (this.mySuggestionRef && suggestionTitle ){
       if (suggestionDescription){
@@ -168,9 +229,7 @@ export class App {
     if (myFirebaseSuggestion === undefined || myFirebaseSuggestion.title === undefined || myFirebaseSuggestion.title === ''){
       this.hasSuggestion = false;
     } else{
-      console.log('there');
       this.hasSuggestion = true;
-      console.log("Changing internal vars to: " + JSON.stringify(myFirebaseSuggestion));
       this.mySuggestionTitle = myFirebaseSuggestion.title;
       this.mySuggestionDescription = myFirebaseSuggestion.description;
     }
@@ -181,6 +240,8 @@ export class App {
     // However, angular 2 does not support iterating over an associative array, so
     // we must first sort this into an array and then set it to this.groupChoices
     // which is the variable that the template is using to render the choices.
+
+
 
     function keys(obj)
     {
@@ -203,11 +264,25 @@ export class App {
 
     var groupChoicesArray = [];
 
-    for (var choice of groupChoicesKeysArray){
-      groupChoicesArray.push(snapshot.val()[choice]);
+    for (var choiceKey of groupChoicesKeysArray){
+      var choice = snapshot.val()[choiceKey];
+      choice.key = choiceKey; // Save the key into the object for back referencing it later.
+
+      //Simply retrieving my rating for the star template.
+
+
+      if (choice.rating && choice.rating[this.authData.uid]){
+        choice.myRating = choice.rating[this.authData.uid];
+      }
+
+
+      groupChoicesArray.push(choice);
     }
 
     this.groupChoices = groupChoicesArray;
+
+    console.log("Group Choices");
+    console.log(this.groupChoices);
 
   }
 
