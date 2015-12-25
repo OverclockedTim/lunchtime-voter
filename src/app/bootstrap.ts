@@ -18,6 +18,7 @@ import {ELEMENT_PROBE_PROVIDERS} from 'angular2/platform/common_dom';
  */
 import {App} from './app';
 import {AppSettingsComponent} from './appSettings'
+import {FirebaseService} from "./services/firebaseService";
 
 
 /*
@@ -50,4 +51,5 @@ bootstrap(ShellComponent, [
   ROUTER_PROVIDERS,
   HTTP_PROVIDERS,
   ELEMENT_PROBE_PROVIDERS,
+  FirebaseService
 ]);

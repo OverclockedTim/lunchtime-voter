@@ -7,6 +7,7 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Inject} from "angular2/core";
 
 import {AppSettingsComponent} from './appSettings';
+import {FirebaseService} from './services/firebaseService'
 
 declare var Materialize: any;
 
@@ -59,7 +60,9 @@ declare var Materialize: any;
 
     <div>
       <br/>
-      <div>Add your suggestion or vote on other people's suggestions until 11:30.  At 11:30, voting stops and a spot is chosen!</div>
+      <div>{{introText}}</div>
+      <!--
+      <div>Add your suggestion or vote on other people's suggestions until 11:30.  At 11:30, voting stops and a spot is chosen!</div>-->
 
       <h4>Add a Lunch Option</h4>
       <form class="col s12">
@@ -147,7 +150,6 @@ declare var Materialize: any;
   `
 })
 export class App {
-  firebaseUrl: string;
   firebaseRef: Firebase;
   userRef: Firebase;
   mySuggestionRef: Firebase;
@@ -158,9 +160,9 @@ export class App {
   mySuggestionDescription: String = "";
   groupChoicesRef: Firebase;
   groupChoices =  [];
-  constructor() {
-    this.firebaseUrl = "https://lunchtimevoter.firebaseio.com/";
-    this.firebaseRef = new Firebase(this.firebaseUrl);
+  introText: String = "Loading intro text...";
+  constructor(firebaseService : FirebaseService) {
+    this.firebaseRef = firebaseService.getFirebaseRef()
     this.firebaseRef.onAuth((user) => {
       if (user) {
         this.authData = user;
@@ -168,21 +170,25 @@ export class App {
         console.log("user logged in.");
 
         //Setup user tree.
-        this.userRef = new Firebase(this.firebaseUrl + "users/" + user.uid + "/");
+        this.userRef = this.firebaseRef.child("users/" + user.uid + "/");
         this.userRef.set({provider: user.provider, group: "default"});
 
         //Setup choice ref.
-        this.mySuggestionRef = new Firebase(this.firebaseUrl + "groups/default/choices/" + user.uid);
+        this.mySuggestionRef = this.firebaseRef.child("groups/default/choices/" + user.uid);
 
         this.mySuggestionRef.on("value",this.onMySuggestionChanged.bind(this), function (errorObject) {
           console.log("The read failed: " + errorObject.code);
         });
 
         //Setup Group Suggestions Ref
-        this.groupChoicesRef = new Firebase(this.firebaseUrl + "groups/default/choices/");
+        this.groupChoicesRef = this.firebaseRef.child("groups/default/choices/");
         this.groupChoicesRef.on("value",this.onGroupChoicesChanged.bind(this), function (errorObject) {
           console.log("The read failed: " + errorObject.code);
         });
+
+        firebaseService.getIntroTextRef().on("value",this.onIntroTextChanged.bind(this),function (errorObject){
+          console.log("Couldn't read intro text: " + errorObject.code)
+        })
 
       }
     });
@@ -232,6 +238,10 @@ export class App {
       }
     }
     Materialize.toast('Your suggestion has been saved.', 4000) // 4000 is the duration of the toast
+  }
+
+  onIntroTextChanged(snapshot){
+    this.introText = snapshot.val();
   }
 
   onMySuggestionChanged(snapshot){

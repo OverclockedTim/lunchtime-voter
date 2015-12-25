@@ -17,6 +17,7 @@
     "src/app/app.ts",
     "src/app/appSettings.ts",
     "src/app/firebase/firebasepipe.ts",
-    "src/app/firebase/firebase.d.ts"
+    "src/app/firebase/firebase.d.ts",
+    "src/app/services/firebaseService.ts"
   ]
 }

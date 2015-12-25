@@ -3,9 +3,10 @@ import {ROUTER_DIRECTIVES} from "angular2/router";
  * Created by @OverclockedTim on 12/24/15.
  */
 
-declare var $: any
+declare var Materialize: any;
 
 import {Component} from 'angular2/core';
+import {FirebaseService} from "./services/firebaseService";
 
 @Component({
     selector: 'app-settings',
@@ -32,7 +33,7 @@ import {Component} from 'angular2/core';
         <form class="col s12">
           <div class="row">
             <div class="input-field col s12">
-              <input placeholder="" id="explanatoryText" type="text" class="validate" [(ngModel)]="explanatoryText" required>
+              <input placeholder="" id="explanatoryText" type="text" class="validate" (keyup.enter)="saveExplanatoryText(explanatoryText)" [(ngModel)]="explanatoryText" required>
               <label for="title">New explanatory text</label>
             </div>
            </div>
@@ -53,7 +54,7 @@ import {Component} from 'angular2/core';
            </div>
         </form>
         <div class="right-align">
-          <a class="waves-effect waves-light btn" (click)="setCurrentVoteFinished(explanatoryText)">
+          <a class="waves-effect waves-light btn" (click)="setCurrentVoteFinished(finishedInput)">
             <i class="material-icons left">library_add</i>
             Set current vote finished
           </a>
@@ -68,7 +69,7 @@ import {Component} from 'angular2/core';
            </div>
         </form>
         <div class="right-align">
-          <a class="waves-effect waves-light btn" (click)="setCurrentVoteFinished(explanatoryText)">
+          <a class="waves-effect waves-light btn" (click)="setCurrentVoteFinished(deleteAllInput)">
             <i class="material-icons left">library_add</i>
             Clear everything and start anew
           </a>
@@ -86,4 +87,22 @@ import {Component} from 'angular2/core';
     `
 })
 export class AppSettingsComponent {
+    introTextRef : Firebase;
+    explanatoryText;
+    constructor(firebaseService : FirebaseService){
+        this.introTextRef = firebaseService.getIntroTextRef();
+        firebaseService.getIntroTextRef().on("value",this.onIntroTextChanged.bind(this),function (errorObject){
+            console.log("Couldn't read intro text: " + errorObject.code)
+        })
+    }
+
+    saveExplanatoryText = function(newExplanatoryText){
+        this.introTextRef.set(newExplanatoryText);
+        Materialize.toast('New explanatory text has been saved.', 4000) // 4000 is the duration of the toast
+    }
+
+    onIntroTextChanged(snapshot){
+        this.explanatoryText = snapshot.val();
+        console.log('explanatory text loaded: ' + snapshot.val());
+    }
 }
