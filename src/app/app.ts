@@ -34,16 +34,19 @@ declare var Materialize: any;
   `],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   template: `
-  <nav class="top-nav">
-    <div class="container">
-      <div class="nav-wrapper">
-      <div class="right" *ngIf="isLoggedIn">
-        <app-settings style="margin-right: 20px"></app-settings>
-        <a (click)="signOut()">Sign Out</a>
+  <header>
+    <nav class="top-nav">
+      <div class="container">
+        <div class="nav-wrapper">
+        <div class="right" *ngIf="isLoggedIn">
+
+          <a [routerLink]="['Settings']" style="margin-right: 20px">Settings</a>
+          <a (click)="signOut()">Sign Out</a>
+        </div>
+        Lunchtime Voter</div>
       </div>
-      Lunchtime Voter</div>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
   <div class="container" *ngIf="!isLoggedIn">
     <br/>

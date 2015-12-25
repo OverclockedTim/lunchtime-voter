@@ -21,11 +21,24 @@
     ES6 browser shim
   -->
   <script src="/lib/es6-shim.js"></script>
+
+  <!-- Sticky footers -->
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1 0 auto;
+    }
+  </style>
 </head>
 <body style="margin: 0">
-  <app>
+  <shell>
     Loading...
-  </app>
+  </shell>
 
   <!-- Common files to be cached -->
   <script src="/build/common.js"></script>
