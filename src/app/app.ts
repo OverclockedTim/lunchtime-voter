@@ -6,6 +6,8 @@ import {NgIf, NgModel} from 'angular2/common';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Inject} from "angular2/core";
 
+import {AppSettingsComponent} from './appSettings';
+
 declare var Materialize: any;
 
 
@@ -20,7 +22,7 @@ declare var Materialize: any;
   selector: 'app', // <app></app>
   // We need to tell Angular's compiler which directives are in our template.
   // Doing so will allow Angular to attach our behavior to an element
-  directives: [ ROUTER_DIRECTIVES ],
+  directives: [ ROUTER_DIRECTIVES, AppSettingsComponent ],
   // Our list of styles in our component. We may add more to compose many styles together
   styles: [`
     .title {
@@ -34,7 +36,12 @@ declare var Materialize: any;
   template: `
   <nav class="top-nav">
     <div class="container">
-      <div class="nav-wrapper"><div class="right" *ngIf="isLoggedIn"><a (click)="signOut()">Sign Out</a></div>Lunchtime Voter</div>
+      <div class="nav-wrapper">
+      <div class="right" *ngIf="isLoggedIn">
+        <app-settings style="margin-right: 20px"></app-settings>
+        <a (click)="signOut()">Sign Out</a>
+      </div>
+      Lunchtime Voter</div>
     </div>
   </nav>
 
@@ -298,6 +305,10 @@ export class App {
     console.log('Signing out...');
     this.firebaseRef.unauth();
     this.isLoggedIn = false;
+  }
+
+  settings(){
+    console.log('Doing the settings thing.');
   }
 
 

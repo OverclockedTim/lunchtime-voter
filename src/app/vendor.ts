@@ -18,3 +18,5 @@ import 'angular2/http';
 import 'rxjs';
 
 // Other vendors for example jQuery or Lodash
+// Note, I'm not bringing in jQuery here since I have to bring it in globally for Materialize.
+// If/When we move Materialize onto something more Typescript friendly, jquery should probably go here.
