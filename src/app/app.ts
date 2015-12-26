@@ -56,7 +56,7 @@ declare var Materialize: any;
     </div>
   </div>
 
-  <div class="container" *ngIf="isLoggedIn">
+  <div class="container" *ngIf="!isVoteFinished">
 
     <div>
       <br/>
@@ -142,6 +142,10 @@ declare var Materialize: any;
       </table>
   </div>
 
+  <div *ngIf="isVoteFinished">
+    <p>Vote finished!</p>
+  </div>
+
   <footer class="page-footer white-text">
     <div class="container">
       LunchtimeVoter is an open source project, fork your own at <a class="white-text" style="text-decoration: underline" href="https://github.com/OverclockedTim/lunchtime-voter">Github</a>
@@ -161,6 +165,7 @@ export class App {
   groupChoicesRef: Firebase;
   groupChoices =  [];
   introText: String = "Loading intro text...";
+  isVoteFinished : Boolean = false;
   constructor(firebaseService : FirebaseService) {
     this.firebaseRef = firebaseService.getFirebaseRef()
     this.firebaseRef.onAuth((user) => {
@@ -187,7 +192,11 @@ export class App {
         });
 
         firebaseService.getIntroTextRef().on("value",this.onIntroTextChanged.bind(this),function (errorObject){
-          console.log("Couldn't read intro text: " + errorObject.code)
+          console.log("Couldn't read intro text: " + errorObject.code);
+        })
+
+        firebaseService.getVoteFinishedRef().on("value",this.onVoteFinishedChanged.bind(this),function (errorObject){
+          console.log("Could get vote finished status: " + errorObject.code);
         })
 
       }
@@ -242,6 +251,10 @@ export class App {
 
   onIntroTextChanged(snapshot){
     this.introText = snapshot.val();
+  }
+
+  onVoteFinishedChanged(snapshot){
+    this.isVoteFinished = snapshot.val();
   }
 
   onMySuggestionChanged(snapshot){

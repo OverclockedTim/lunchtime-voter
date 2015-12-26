@@ -45,19 +45,21 @@ import {FirebaseService} from "./services/firebaseService";
           </a>
         </div>
 
-        <form class="col s12">
-          <div class="row">
-            <div class="input-field col s12">
-              <input placeholder="" id="finishedInput" type="text" class="validate" [(ngModel)]="finishedInput" required>
-              <label for="title">Type 'FINISHED' to be sure...</label>
+        <div *ngIf="!isVoteFinished">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s12">
+                  <input placeholder="" id="finishedInput" type="text" class="validate" (keyup.enter)="setCurrentVoteFinished(finishedInput)" [(ngModel)]="finishedInput" required>
+                  <label for="title">Type 'FINISHED' to be sure...</label>
+                </div>
+               </div>
+            </form>
+            <div class="right-align">
+              <a class="waves-effect waves-light btn" (click)="setCurrentVoteFinished(finishedInput)">
+                <i class="material-icons left">library_add</i>
+                Set current vote finished
+              </a>
             </div>
-           </div>
-        </form>
-        <div class="right-align">
-          <a class="waves-effect waves-light btn" (click)="setCurrentVoteFinished(finishedInput)">
-            <i class="material-icons left">library_add</i>
-            Set current vote finished
-          </a>
         </div>
 
         <form class="col s12">
@@ -88,12 +90,20 @@ import {FirebaseService} from "./services/firebaseService";
 })
 export class AppSettingsComponent {
     introTextRef : Firebase;
+    voteFinishedRef : Firebase;
     explanatoryText;
+    isVoteFinished : Boolean = false;
     constructor(firebaseService : FirebaseService){
         this.introTextRef = firebaseService.getIntroTextRef();
+        this.voteFinishedRef = firebaseService.getVoteFinishedRef();
+
         firebaseService.getIntroTextRef().on("value",this.onIntroTextChanged.bind(this),function (errorObject){
             console.log("Couldn't read intro text: " + errorObject.code)
-        })
+        });
+
+        firebaseService.getVoteFinishedRef().on("value",this.onVoteFinishedRefChanged.bind(this),function(errorObject){
+            console.log("Couldn't read vote finished text: " + errorObject.code);
+        });
     }
 
     saveExplanatoryText = function(newExplanatoryText){
@@ -103,6 +113,19 @@ export class AppSettingsComponent {
 
     onIntroTextChanged(snapshot){
         this.explanatoryText = snapshot.val();
-        console.log('explanatory text loaded: ' + snapshot.val());
+    }
+
+    onVoteFinishedRefChanged(snapshot){
+        this.isVoteFinished = snapshot.val();
+
+    }
+
+    setCurrentVoteFinished(finishedText){
+        if (finishedText === undefined || finishedText.toLowerCase() !== 'finished'){
+            Materialize.toast('Please type "FINISHED" in the box so we know you are sure. This action is not reversible.', 4000) // 4000 is the duration of the toast
+        } else {
+            this.voteFinishedRef.set(true);
+            Materialize.toast('Current vote has been set to finished.');
+        }
     }
 }

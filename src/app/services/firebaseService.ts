@@ -16,5 +16,9 @@ export class FirebaseService {
         return this.firebaseRef.child('groups/default/introText');
     }
 
+    public getVoteFinishedRef = function(){
+        return this.firebaseRef.child('groups/default/isVoteFinished');
+    }
+
 
 }
