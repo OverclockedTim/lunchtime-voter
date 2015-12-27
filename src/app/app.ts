@@ -7,6 +7,7 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Inject} from "angular2/core";
 
 import {AppSettingsComponent} from './appSettings';
+import {VoteFinishedComponent} from './voteFinishedHomeComponent'
 import {FirebaseService} from './services/firebaseService'
 
 declare var Materialize: any;
@@ -23,7 +24,7 @@ declare var Materialize: any;
   selector: 'app', // <app></app>
   // We need to tell Angular's compiler which directives are in our template.
   // Doing so will allow Angular to attach our behavior to an element
-  directives: [ ROUTER_DIRECTIVES, AppSettingsComponent ],
+  directives: [ ROUTER_DIRECTIVES, AppSettingsComponent, VoteFinishedComponent ],
   // Our list of styles in our component. We may add more to compose many styles together
   styles: [`
     .title {
@@ -142,9 +143,10 @@ declare var Materialize: any;
       </table>
   </div>
 
-  <div *ngIf="isVoteFinished">
-    <p>Vote finished!</p>
-  </div>
+
+  <vote-finished-home *ngIf="isVoteFinished"></vote-finished-home>
+
+
 
   <footer class="page-footer white-text">
     <div class="container">
