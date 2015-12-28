@@ -20,5 +20,9 @@ export class FirebaseService {
         return this.firebaseRef.child('groups/default/isVoteFinished');
     }
 
+    public getGroupChoicesRef = function(){
+        return this.firebaseRef.child("groups/default/choices/");
+    }
+
 
 }

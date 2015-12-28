@@ -188,7 +188,7 @@ export class App {
         });
 
         //Setup Group Suggestions Ref
-        this.groupChoicesRef = this.firebaseRef.child("groups/default/choices/");
+        this.groupChoicesRef = firebaseService.getGroupChoicesRef();
         this.groupChoicesRef.on("value",this.onGroupChoicesChanged.bind(this), function (errorObject) {
           console.log("The read failed: " + errorObject.code);
         });
@@ -275,8 +275,6 @@ export class App {
     // However, angular 2 does not support iterating over an associative array, so
     // we must first sort this into an array and then set it to this.groupChoices
     // which is the variable that the template is using to render the choices.
-
-
 
     function keys(obj)
     {
