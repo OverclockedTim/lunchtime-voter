@@ -16,8 +16,8 @@ import {ELEMENT_PROBE_PROVIDERS} from 'angular2/platform/common_dom';
 /*
  * These are our root level components for routing.
  */
-import {App} from './app';
-import {AppSettingsComponent} from './appSettings'
+import {HomeComponent} from './homeComponent';
+import {AppSettingsComponent} from './appSettingsComponent'
 import {FirebaseService} from "./services/firebaseService";
 
 
@@ -35,7 +35,7 @@ import {FirebaseService} from "./services/firebaseService";
   directives: [ROUTER_DIRECTIVES]
 })
 @RouteConfig([
-  { path: '/', component: App, name: 'Home' },
+  { path: '/', component: HomeComponent, name: 'Home' },
   { path: '/settings', component: AppSettingsComponent, name: 'Settings'}
 ])
 export class ShellComponent {

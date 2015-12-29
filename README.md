@@ -86,7 +86,7 @@ We use the component approach in our starter. This is the new standard for devel
 ├──src/                                   * our source files that will be compiled to javascript
 │   │
 │   ├──app/                               * WebApp: folder
-│   │   ├──app.ts                         * App.ts: a simple version of our App component components
+│   │   ├──homeComponent.ts                         * App.ts: a simple version of our App component components
 │   │   └──bootstrap.ts                   * entry file for app
 │   │
 │   ├──bindings/                          * where common files used throughout our app

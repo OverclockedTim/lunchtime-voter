@@ -14,9 +14,10 @@
   },
   "files": [
     "src/app/bootstrap.ts",
-    "src/app/app.ts",
-    "src/app/appSettings.ts",
+    "src/app/homeComponent.ts",
+    "src/app/appSettingsComponent.ts",
     "src/app/voteFinishedHomeComponent.ts",
+    "src/app/votingHomeComponent.ts",
     "src/app/firebase/firebasepipe.ts",
     "src/app/firebase/firebase.d.ts",
     "src/app/services/firebaseService.ts"
