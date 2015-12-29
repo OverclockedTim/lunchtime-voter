@@ -10,6 +10,7 @@ import {AppSettingsComponent} from './appSettingsComponent';
 import {VoteFinishedComponent} from './voteFinishedHomeComponent';
 import {FirebaseService} from './services/firebaseService';
 import {VotingHomeComponent} from './votingHomeComponent';
+import {CreateOrJoinGroupComponent} from "./createOrJoinGroupComponent";
 
 declare var Materialize: any;
 
@@ -25,7 +26,7 @@ declare var Materialize: any;
   selector: 'app', // <app></app>
   // We need to tell Angular's compiler which directives are in our template.
   // Doing so will allow Angular to attach our behavior to an element
-  directives: [ ROUTER_DIRECTIVES, AppSettingsComponent, VoteFinishedComponent, VotingHomeComponent ],
+  directives: [ ROUTER_DIRECTIVES, AppSettingsComponent, VoteFinishedComponent, VotingHomeComponent, CreateOrJoinGroupComponent ],
   // Our list of styles in our component. We may add more to compose many styles together
   styles: [`
     .title {
@@ -58,8 +59,9 @@ declare var Materialize: any;
     </div>
   </div>
 
-  <voting-home *ngIf="isLoggedIn && !isVoteFinished"></voting-home>
-  <vote-finished-home *ngIf="isLoggedIn && isVoteFinished"></vote-finished-home>
+  <create-or-join-group *ngIf="isLoggedIn && !hasGroup"></create-or-join-group>
+  <voting-home *ngIf="isLoggedIn && hasGroup && !isVoteFinished"></voting-home>
+  <vote-finished-home *ngIf="isLoggedIn && hasGroup && isVoteFinished"></vote-finished-home>
 
 
 
@@ -74,6 +76,7 @@ export class HomeComponent {
   firebaseRef: Firebase;
   userRef: Firebase;
   isLoggedIn: boolean;
+  hasGroup: boolean;
   authData: any;
   isVoteFinished : Boolean = false;
   constructor(firebaseService : FirebaseService) {
@@ -85,9 +88,13 @@ export class HomeComponent {
         console.log("user logged in.");
 
         //Setup user tree.
-        //TODO: This is auto joining 'default' group.  Stop it.
         this.userRef = this.firebaseRef.child("users/" + user.uid + "/");
-        this.userRef.set({provider: user.provider, group: "default"});
+
+        this.userRef.on("value",this.onUserChanged.bind(this),function(errorObject){
+          console.log('Failed to get user object: ' + errorObject.code);
+        })
+
+        //this.userRef.set({provider: user.provider, group: "default"});
 
         firebaseService.getVoteFinishedRef().on("value",this.onVoteFinishedChanged.bind(this),function (errorObject){
           console.log("Could get vote finished status: " + errorObject.code);
@@ -98,6 +105,14 @@ export class HomeComponent {
   }
   onVoteFinishedChanged(snapshot){
     this.isVoteFinished = snapshot.val();
+  }
+
+  onUserChanged(snapshot){
+    console.log('User Changed.');
+    console.log(snapshot.val());
+    if (snapshot.val() !== undefined && snapshot.val() !== null && snapshot.val().group !== undefined && snapshot.val().group !== null){
+      this.hasGroup = true;
+    }
   }
 
   authenticateWithGoogle(){

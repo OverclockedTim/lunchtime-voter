@@ -15,6 +15,7 @@
   "files": [
     "src/app/bootstrap.ts",
     "src/app/homeComponent.ts",
+    "src/app/createOrJoinGroupComponent.ts",
     "src/app/appSettingsComponent.ts",
     "src/app/voteFinishedHomeComponent.ts",
     "src/app/votingHomeComponent.ts",
