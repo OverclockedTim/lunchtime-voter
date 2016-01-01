@@ -108,8 +108,6 @@ export class HomeComponent {
   }
 
   onUserChanged(snapshot){
-    console.log('User Changed.');
-    console.log(snapshot.val());
     if (snapshot.val() !== undefined && snapshot.val() !== null && snapshot.val().group !== undefined && snapshot.val().group !== null){
       this.hasGroup = true;
     }
