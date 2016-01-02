@@ -11,7 +11,6 @@ import {FirebaseService} from './services/firebaseService'
 
 declare var Materialize: any;
 
-
 /*
  * App Component
  * Top Level Component
@@ -24,9 +23,9 @@ declare var Materialize: any;
     <div class="container">
         <div>
           <br/>
+          <em>Link for Sharing: TODO</em>
+          <br/>
           <div>{{introText}}</div>
-          <!--
-          <div>Add your suggestion or vote on other people's suggestions until 11:30.  At 11:30, voting stops and a spot is chosen!</div>-->
 
           <h4>Add a Lunch Option</h4>
           <form class="col s12">
@@ -126,24 +125,36 @@ export class VotingHomeComponent {
 
                 //Setup user tree.
                 this.userRef = this.firebaseRef.child("users/" + user.uid + "/");
-                this.userRef.set({provider: user.provider, group: "default"});
 
-                //Setup choice ref.
-                this.mySuggestionRef = this.firebaseRef.child("groups/default/choices/" + user.uid);
+                this.userRef.on("value",function(userSnapshot) {
 
-                this.mySuggestionRef.on("value",this.onMySuggestionChanged.bind(this), function (errorObject) {
-                    console.log("The read failed: " + errorObject.code);
-                });
+                    //TODO: Type User.
+                    let user = userSnapshot.val();
+                    if (user != null) {
+                        let groupId = user.group;
+                        console.log('Logged into group: ' + user.group);
 
-                //Setup Group Suggestions Ref
-                this.groupChoicesRef = firebaseService.getGroupChoicesRef();
-                this.groupChoicesRef.on("value",this.onGroupChoicesChanged.bind(this), function (errorObject) {
-                    console.log("The read failed: " + errorObject.code);
-                });
+                        //Setup Group Suggestions Ref
+                        this.groupChoicesRef = firebaseService.getGroupChoicesRef(groupId);
 
-                firebaseService.getIntroTextRef().on("value",this.onIntroTextChanged.bind(this),function (errorObject){
-                    console.log("Couldn't read intro text: " + errorObject.code);
-                })
+
+                        this.groupChoicesRef.on("value", this.onGroupChoicesChanged.bind(this), function (errorObject) {
+                            console.log("The read failed: " + errorObject.code);
+                        });
+
+                        firebaseService.getIntroTextRef(groupId).on("value", this.onIntroTextChanged.bind(this), function (errorObject) {
+                            console.log("Couldn't read intro text: " + errorObject.code);
+                        })
+
+                        //Setup choice ref.
+                        this.mySuggestionRef = this.firebaseRef.child('groups/'+groupId+'/choices/' + this.authData.uid);
+
+                        this.mySuggestionRef.on("value",this.onMySuggestionChanged.bind(this), function (errorObject) {
+                            console.log("The read failed: " + errorObject.code);
+                        });
+                    }
+                }.bind(this));
+
 
             }
         });

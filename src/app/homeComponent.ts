@@ -73,6 +73,7 @@ declare var Materialize: any;
   `
 })
 export class HomeComponent {
+  firebaseService : FirebaseService;
   firebaseRef: Firebase;
   userRef: Firebase;
   isLoggedIn: boolean;
@@ -80,6 +81,7 @@ export class HomeComponent {
   authData: any;
   isVoteFinished : Boolean = false;
   constructor(firebaseService : FirebaseService) {
+    this.firebaseService = firebaseService;
     this.firebaseRef = firebaseService.getFirebaseRef()
     this.firebaseRef.onAuth((user) => {
       if (user) {
@@ -94,12 +96,6 @@ export class HomeComponent {
           console.log('Failed to get user object: ' + errorObject.code);
         })
 
-        //this.userRef.set({provider: user.provider, group: "default"});
-
-        firebaseService.getVoteFinishedRef().on("value",this.onVoteFinishedChanged.bind(this),function (errorObject){
-          console.log("Could get vote finished status: " + errorObject.code);
-        })
-
       }
     });
   }
@@ -110,6 +106,11 @@ export class HomeComponent {
   onUserChanged(snapshot){
     if (snapshot.val() !== undefined && snapshot.val() !== null && snapshot.val().group !== undefined && snapshot.val().group !== null){
       this.hasGroup = true;
+
+      this.firebaseService.getVoteFinishedRef(snapshot.val().group).on("value",this.onVoteFinishedChanged.bind(this),function (errorObject){
+        console.log("Could get vote finished status: " + errorObject.code);
+      })
+
     }
   }
 

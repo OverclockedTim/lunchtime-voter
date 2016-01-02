@@ -92,8 +92,7 @@ export class CreateOrJoinGroupComponent {
     }
 
     createGroup(newGroupName){
-        let myGroupRef : Firebase = this.firebaseRef.child("groups/" + this.authData.uid + "/");
-
+        //TODO: If we're deleting an old group, we need to remove all references via the users/group branch.
         let newSecret = this.makeSecret();
 
         let myMembersEntry : any = {};
@@ -108,15 +107,17 @@ export class CreateOrJoinGroupComponent {
             "members" : myMembersEntry,
 
         };
-        console.log('Attempting to save new group: ' + JSON.stringify(newGroup));
-        myGroupRef.set(newGroup);
 
-        //Setup user tree.
-        let userRef : Firebase = this.firebaseRef.child("users/" + this.authData.uid + "/");
+        var updatedUserData = {};
+        updatedUserData["groups/" + this.authData.uid] = newGroup;
+        updatedUserData["users/" + this.authData.uid + "/group"] = this.authData.uid;
 
-        //this.userRef.set({provider: user.provider, group: "default"});
+        this.firebaseRef.update(updatedUserData,function(error){
+            if (error){
+                Materialize.toast('Error creating group. Please try again later.', 4000) // 4000 is the duration of the toast
+            }
 
-        console.log('TODO: write membership info into user branch');
+        });
     }
 
     joinGroup(groupId, groupSecret){

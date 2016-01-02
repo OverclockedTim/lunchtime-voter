@@ -1,5 +1,3 @@
-
-
 export class FirebaseService {
     private firebaseUrl: string;
     private firebaseRef: Firebase;
@@ -12,16 +10,16 @@ export class FirebaseService {
         return this.firebaseRef;
     }
 
-    public getIntroTextRef = function(){
-        return this.firebaseRef.child('groups/default/introText');
+    public getIntroTextRef = function(groupId : String){
+        return this.firebaseRef.child('groups/'+groupId+'/introText');
     }
 
-    public getVoteFinishedRef = function(){
-        return this.firebaseRef.child('groups/default/isVoteFinished');
+    public getVoteFinishedRef = function(groupId : String){
+        return this.firebaseRef.child('groups/'+groupId+'/isVoteFinished');
     }
 
-    public getGroupChoicesRef = function(){
-        return this.firebaseRef.child("groups/default/choices/");
+    public getGroupChoicesRef = function(groupId : String){
+        return this.firebaseRef.child('groups/'+groupId+'/choices/');
     }
 
 
