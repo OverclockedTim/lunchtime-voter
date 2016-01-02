@@ -23,7 +23,7 @@ declare var Materialize: any;
     <div class="container">
         <div>
           <br/>
-          <em *ngIf="groupSecret">Link for Sharing: https://lunchtimevoter.com/?groupId={{groupId}}&groupSecret={{groupSecret}}</em>
+          <em *ngIf="groupSecret">Link for Sharing: {{linkRoot}}/?groupId={{groupId}}&groupSecret={{groupSecret}}</em>
           <br/><br/>
           <div>{{introText}}</div>
 
@@ -119,6 +119,7 @@ export class VotingHomeComponent {
     introText: String = "Loading intro text...";
     groupId : String;
     groupSecret: String;
+    linkRoot : String = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
     constructor(firebaseService : FirebaseService) {
         this.firebaseRef = firebaseService.getFirebaseRef()
         this.firebaseRef.onAuth((user) => {
