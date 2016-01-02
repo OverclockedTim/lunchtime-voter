@@ -1,6 +1,6 @@
 # Overview
 
-Lunchtime Voter is a primarily two things - 1. An example project for Angular 2 and Firebase, and 2. a tool for teams to decide where to go for lunch.
+Lunchtime Voter is a primarily two things: 1. An example project for Angular 2 and Firebase, and 2. a tool for teams to decide where to go for lunch.
 
 ## Technologies
 
