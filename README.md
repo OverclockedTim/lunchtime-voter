@@ -31,7 +31,7 @@ See a live example: [lunchtimevoter.com](https://lunchtimevoter.com)
 
 ## Contributing
 
-Everyone is welcome to commit towards this primary goal.  Design changes will be voted on my active commiters.
+Everyone is welcome to commit towards this primary goal.  Design changes will be voted on by active commiters.
 
 ### Contributing Bugs
 
