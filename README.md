@@ -1,13 +1,13 @@
 # Overview
 
-Lunchtime Voter is a primarily two things - fun project for teams and weekend exploration of bleeding edge technologies <echo>OF THE FUTURE</echo>.
+Lunchtime Voter is a primarily two things - 1. An example project for Angular 2 and Firebase, and 2. a tool for teams to decide where to go for lunch.
 
 ## Technologies
 
 * Typescript as web client language
 * Angular 2 as framework
 * Firebase as database
-* Possibly Materialize.css as CSS framework?  I can't find a lot that really works well with Angular 2 just yet.
+* Materialize.css as CSS framework. (This may get swapped out in the future when the angular team gets angular-material ready for Angular 2)
 
 ### Possible Future Technologies
 
@@ -25,17 +25,7 @@ will know what I'm talking about :)  So this is just a quick way to get together
 Everyone gets to submit one idea for lunch. Everyone else votes on an idea.  The idea with the highest common point total wins,
 and the group goes there for lunch.
 
-### Prototype Idea Pics
-
-![1. Set a Deadline](design/1_ Deadline.png)
-
-![2. Invite](design/2_ Invite.png)
-
-![3. Pick a Time](design/3_ Pick a Time.png)
-
-![4. Pick a Place](design/4_ Pick a Place.png)
-
-![5. Lunching](design/5_Lunching.png)
+See a live example: [lunchtimevoter.com](https://lunchtimevoter.com)
 
 ## Contributing
 
@@ -47,15 +37,11 @@ Done through github issues
 
 ### Chatting.
 
-Done through Slack.  Link TBD.
+If there is interest, I'll start a slack team.
 
 ### Contributing Code
 
 Github pull requests. 
-
-### Contributing BBQ and/or Bubble Tea.
-
-I will definitely come to your house anytime.
 
 # Getting Started / Running
 
@@ -66,61 +52,6 @@ npm install
 npm start 
 ```
 go to [http://localhost:3000](http://localhost:3000) in your browser
-
-# Table of Contents
-* [File Structure](#file-structure)
-* [Getting Started](#getting-started)
-* [Dependencies](#dependencies)
-* [Installing](#installing)
-* [Running the app](#running-the-app)
-* [Contributing](#contributing)
-* [TypeScript](#typescript)
-* [Frequently asked questions](#frequently-asked-questions)
-* [Support, Questions, or Feedback](#support-questions-or-feedback)
-* [License](#license)
-
-
-## File Structure
-We use the component approach in our starter. This is the new standard for developing Angular apps and a great way to ensure maintainable code by encapsulation of our behavior logic. A component is basically a self contained app usually in a single file or a folder with each concern as a file: style, template, specs, e2e, and component class. Here's how it looks:
-```angular2-webpack-starter/
-├──src/                                   * our source files that will be compiled to javascript
-│   │
-│   ├──app/                               * WebApp: folder
-│   │   ├──homeComponent.ts                         * App.ts: a simple version of our App component components
-│   │   └──bootstrap.ts                   * entry file for app
-│   │
-│   ├──bindings/                          * where common files used throughout our app
-│   │   ├──location_bindings.ts           * injectables to change the Router location Strategy
-│   │   └──change_detection_bindings.ts   * injectables to change Angular's Change Detection Strategy
-│   │
-│   ├──public/                            * static assets are served here
-│   │   ├──lib/                           * static libraries
-│   │   │   └──es6-shim.js                * ignore this file. This is needed to polyfill the browser to for ES6 features to similarly
-│   │   │
-│   │   ├──favicon.ico                    * replace me with your own favicon.ico
-│   │   ├──service-worker.js              * ignore this. Web App service worker that's not complete yet
-│   │   ├──robots.txt                     * for search engines to crawl your website
-│   │   ├──human.txt                      * for humans to know who the developers are
-│   │   │
-│   │   └──index.html                     * Index.html: where we place our script tags
-│   │
-│   └──typings/                           * where we define our custom types
-│       ├──ng2.d.ts                       * where we patch angular2 types with our own types until it's fixed
-│       └──_custom.d.ts                   * we include all of our custom types here
-│
-├──tsd_typings/                           * ignore this auto generated file from tsd
-│   └──tsd.d.ts                           * ignore this our main file for all of our type definitions
-│
-├──test/                                  * this is our global unit tests and end-to-end tests
-│
-├──spec.bundle.js                         * ignore this magic that sets up our angular 2 testing environment
-├──karma.config.js                        * karma config for our unit tests
-├──protractor.config.js                   * protractor config for our end-to-end tests
-├──tsconfig.json                          * config that webpack uses for typescript
-├──tsd.json                               * config that tsd uses for managing it's definitions
-├──package.json                           * what npm uses to manage it's dependencies
-└──webpack.config.js                      * our webpack config
-```
 
 # Getting Started
 ## Dependencies
@@ -149,7 +80,7 @@ npm run server # or either webpack-dev-server or npm run express
 ```
 
 ## Other commands 
-fire
+
 ### build files
 ```bash
 npm run build  # or webpack
@@ -193,38 +124,10 @@ The TSD typings in `tsd_typings/` are autogenerated.
 npm install --global tsd
 ```
 
-> You may need to require `reference path` for your editor to autocomplete correctly
-```
-/// <reference path="/src/typings/_custom.d.ts" />
-```
+#Steps to Deploy your own
 
-If your editor only works with reference path here's the convention I'm using
+0. Get yourself setup with a [firebase account](https://<yourfirebase>.firebaseio.com/?page=Hosting)
+1. Enter your own firebase address into firebaseUrl in /src/app/services/firebaseService.ts
+2. npm run build
+3. firebase deploy
 
-`/src/typings/` hand written typings for when you need to create/update one for a library 
-
-`/src/typings/_custom.d.s` main file to require everything (reference path this file)
-
-`/src/typings/tsd.d.ts` requires tsd_typings
-
-`/tsd_typings/` tsd typings (like node_modules these files live and generates at root level)
-
-Otherwise including them in `tsd.json` is much prefered 
-
-## Use a TypeScript-aware editor
-We have good experience using these editors:
-
-* [Visual Studio Code](https://code.visualstudio.com/)
-* [Webstorm 10](https://www.jetbrains.com/webstorm/download/)
-* [Atom](https://atom.io/) with [TypeScript plugin](https://atom.io/packages/atom-typescript)
-* [Sublime Text](http://www.sublimetext.com/3) with [Typescript-Sublime-Plugin](https://github.com/Microsoft/Typescript-Sublime-plugin#installation)
-
-# Data Design
-
-An example, MVP Data Design doc is now included to help everybody get an idea of the layout in firebase.  This is a simplest-possible-case data design.
-
-![1. Data Design](design/data_design.png)
-
-
-#Deploy your own
-
-https://<yourfirebase>.firebaseio.com/?page=Hosting
