@@ -7,6 +7,8 @@ import {FirebaseService} from "./services/firebaseService";
 import {ROUTER_DIRECTIVES} from "angular2/router";
 import {RouteParams} from "angular2/router";
 
+declare var Materialize: any;
+
 @Component({
     selector: 'create-or-join-group',
     directives: [ROUTER_DIRECTIVES],
@@ -118,17 +120,17 @@ export class CreateOrJoinGroupComponent {
     }
 
     joinGroup(groupId, groupSecret){
-        console.log('TODO: Join a group: ' + groupId + " (" + groupSecret + ")");
+        var updatedUserData = {};
+        updatedUserData["groups/" + groupId + "/members/" + this.authData.uid] = groupSecret;
+        updatedUserData["users/" + this.authData.uid + "/group"] = groupId;
 
+        this.firebaseRef.update(updatedUserData,function(error){
+            if (error){
+                //TODO: Rework this to use Angular's new form error functionality.
+                Materialize.toast('Invalid group ID or Secret. Please try again.', 4000) // 4000 is the duration of the toast
+            }
 
-        let myGroupMembersEntryRef : Firebase = this.firebaseRef.child("groups/" + groupId + "/members");
-
-        let membersEntryObject = {};
-        membersEntryObject[this.authData.uid] = groupSecret;
-
-        console.log('Members Entry Object: ' + JSON.stringify(membersEntryObject));
-
-        myGroupMembersEntryRef.set(membersEntryObject);
+        });
     }
 
 }
