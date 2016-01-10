@@ -10,6 +10,7 @@ import {AppSettingsComponent} from './appSettingsComponent';
 import {FirebaseService} from './services/firebaseService'
 
 declare var Materialize: any;
+declare var $ : any;
 
 /*
  * App Component
@@ -103,6 +104,19 @@ declare var Materialize: any;
               </tr>
             </tbody>
           </table>
+
+      <!-- Modal Structure -->
+      <div id="mySuggestionTitleChangeConfirmation" class="modal">
+        <div class="modal-content">
+          <h4>Are you sure?</h4>
+          <p>Changing the title of your suggestion will clear all votes for it - yours and anyone else who has voted for it. Are you sure you want to go ahead?</p>
+        </div>
+        <div class="modal-footer">
+            <a (click)="agreeToPendingSuggestionUpdate()"  class="modal-action modal-close waves-effect waves-green btn-flat ">Change my suggestion and clear the votes.</a>
+            <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">Cancel</a>
+
+          </div>
+      </div>
   </div>
   `
 })
@@ -114,6 +128,8 @@ export class VotingHomeComponent {
     hasSuggestion: boolean;
     mySuggestionTitle: String = "";
     mySuggestionDescription: String = "";
+    savedMySuggestionTitle: String = "";
+    savedMySuggestionDescription: String = "";
     groupChoicesRef: Firebase;
     groupChoices =  [];
     introText: String = "Loading intro text...";
@@ -206,16 +222,42 @@ export class VotingHomeComponent {
         return '#f5f5f5';
     }
 
+    agreeToPendingSuggestionUpdate(){
+        if (this.mySuggestionDescription){
+            this.mySuggestionRef.set({title: this.mySuggestionTitle, description: this.mySuggestionDescription});
+        }
+        else{
+            this.mySuggestionRef.set({title: this.mySuggestionTitle, description: ""});
+        }
+
+        Materialize.toast('Your suggestion has been saved.', 4000) // 4000 is the duration of the toast
+    }
+
     setMySuggestion(suggestionTitle,suggestionDescription){
         if (this.mySuggestionRef && suggestionTitle ){
-            if (suggestionDescription){
-                this.mySuggestionRef.set({title: suggestionTitle, description: suggestionDescription});
+            //If the title is changed, we use 'set' which wipes all out descendants (the choices).
+            if (suggestionTitle != this.savedMySuggestionTitle){
+                if (this.savedMySuggestionTitle != ""){
+                    $('#mySuggestionTitleChangeConfirmation').openModal();
+                }
+                else{
+                    this.agreeToPendingSuggestionUpdate();
+                }
             }
-            else{
-                this.mySuggestionRef.set({title: suggestionTitle, description: ""});
+            else {
+                //If the title hasn't changed, we use 'update' instead which will not wipe out the votes.
+                if (suggestionDescription != this.savedMySuggestionDescription){
+                    this.mySuggestionRef.update({description: suggestionDescription});
+                    Materialize.toast('Description updated.', 4000) // 4000 is the duration of the toast
+                }
+                else{
+                    Materialize.toast('No changes detected.', 4000) // 4000 is the duration of the toast
+                }
+
             }
+
         }
-        Materialize.toast('Your suggestion has been saved.', 4000) // 4000 is the duration of the toast
+
     }
 
     onIntroTextChanged(snapshot){
@@ -233,6 +275,10 @@ export class VotingHomeComponent {
             this.hasSuggestion = true;
             this.mySuggestionTitle = myFirebaseSuggestion.title;
             this.mySuggestionDescription = myFirebaseSuggestion.description;
+
+            this.savedMySuggestionTitle = myFirebaseSuggestion.title;
+            this.savedMySuggestionDescription = myFirebaseSuggestion.description;
+
         }
     }
 
