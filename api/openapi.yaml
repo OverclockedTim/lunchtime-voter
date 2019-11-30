@@ -1,0 +1,216 @@
+openapi: 3.0.0
+info:
+  title: Simple Lunchtime Voter API
+  description: Vote for your lunch.
+  contact:
+    email: tim@lunchtimevoter.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/Palantar/LunchtimeVoter/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+paths:
+  /createLunchVote:
+    post:
+      summary: Creates a new lunch vote
+      description: Creates a new lunch vote, returns the GUID for that lunch vote.
+      operationId: createLunchVote
+      requestBody:
+        description: Create a new vote with a particular name at a particular time.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteCreationRequestObject'
+        required: true
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+  /suggest:
+    post:
+      summary: Suggest a new option for lunch
+      operationId: suggest
+      requestBody:
+        description: Create a new vote with a particular name at a particular time.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSuggestionObject'
+        required: true
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+  /vote:
+    post:
+      summary: Vote for all of the lunch spots that sound good to you.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/VoteObject'
+        required: true
+      responses:
+        "200":
+          description: Ack.
+        "400":
+          description: bad input parameter
+  /getSuggestions:
+    get:
+      summary: Returns a list of suggestions for the current lunch vote
+      parameters:
+      - name: lunchId
+        in: path
+        description: GUID of the lunch to get status of
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuggestionObject'
+        "400":
+          description: bad input parameter
+  /getVoteStatus:
+    get:
+      summary: Returns a list of suggestions for the current lunch vote. Note that
+        voteResults are only included if we are past the voteTime
+      parameters:
+      - name: lunchId
+        in: path
+        description: GUID of the lunch to get status of
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteStatusObject'
+components:
+  schemas:
+    VoteStatusObject:
+      required:
+      - voteCountdown
+      - voteResults
+      type: object
+      properties:
+        voteCountdown:
+          $ref: '#/components/schemas/VoteCountdownObject'
+        voteResults:
+          $ref: '#/components/schemas/VoteResultsObject'
+    VoteCountdownObject:
+      required:
+      - timeRemaining
+      - voteTime
+      type: object
+      properties:
+        voteTime:
+          type: string
+          example: Monday, 12:00 PM
+        timeRemaining:
+          type: string
+          example: 4 hours, 13 minutes, 12 seconds
+    VoteResultsObject:
+      required:
+      - suggestionDescription
+      - suggestionTitle
+      - voteCount
+      type: object
+      properties:
+        suggestionTitle:
+          type: string
+          example: McDonalds
+        suggestionDescription:
+          type: string
+          example: A place to eat fries
+        voteCount:
+          type: integer
+          example: 2
+    VoteObject:
+      required:
+      - acceptableChoices
+      - lunchId
+      type: object
+      properties:
+        lunchId:
+          type: string
+          description: The GUID for your lunchtime vote
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        acceptableChoices:
+          type: array
+          items:
+            type: integer
+    VoteCreationRequestObject:
+      required:
+      - voteTime
+      type: object
+      properties:
+        voteName:
+          type: string
+          description: The date/time (Pacific Time) to count the votes, eg "12:00"
+            or "1/1/2020 11:30"
+        name:
+          type: string
+          description: The name of your lunchtime vote, eg "Tuesday" or "Bob's Going
+            Away Party"
+    CreateSuggestionObject:
+      required:
+      - lunchId
+      - suggestionDescription
+      - suggestionTitle
+      type: object
+      properties:
+        lunchId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        suggestionTitle:
+          type: string
+          example: McDonalds
+        suggestionDescription:
+          type: string
+          example: A place to eat fries
+    SuggestionObject:
+      required:
+      - lunchId
+      - suggestionDescription
+      - suggestionNumber
+      - suggestionTitle
+      type: object
+      properties:
+        lunchId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        suggestionTitle:
+          type: string
+          example: McDonalds
+        suggestionDescription:
+          type: string
+          example: A place to eat fries
