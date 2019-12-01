@@ -1,38 +1,39 @@
 openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: Lambda prod server
+    url: https://peqalf7v96.execute-api.us-east-1.amazonaws.com/Prod
 info:
-  title: Simple Lunchtime Voter API
   description: Vote for your lunch.
+  version: "1.0.0"
+  title: Simple Lunchtime Voter API
   contact:
     email: tim@lunchtimevoter.com
   license:
     name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
-servers:
-- url: https://virtserver.swaggerhub.com/Palantar/LunchtimeVoter/1.0.0
-  description: SwaggerHub API Auto Mocking
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: developers
-  description: Operations available to regular developers
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
 paths:
   /createLunchVote:
     post:
       summary: Creates a new lunch vote
-      description: Creates a new lunch vote, returns the GUID for that lunch vote.
       operationId: createLunchVote
+      description: Creates a new lunch vote, returns the GUID for that lunch vote.
       requestBody:
         description: Create a new vote with a particular name at a particular time.
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/VoteCreationRequestObject'
-        required: true
       responses:
-        "201":
+        '201':
           description: Created
-        "400":
+        '400':
           description: Bad Request
   /suggest:
     post:
@@ -40,47 +41,45 @@ paths:
       operationId: suggest
       requestBody:
         description: Create a new vote with a particular name at a particular time.
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateSuggestionObject'
-        required: true
       responses:
-        "201":
+        '201':
           description: Created
-        "400":
+        '400':
           description: Bad Request
   /vote:
     post:
       summary: Vote for all of the lunch spots that sound good to you.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: array
               items:
                 $ref: '#/components/schemas/VoteObject'
-        required: true
       responses:
-        "200":
+        '200':
           description: Ack.
-        "400":
+        '400':
           description: bad input parameter
   /getSuggestions:
     get:
-      summary: Returns a list of suggestions for the current lunch vote
       parameters:
-      - name: lunchId
-        in: path
-        description: GUID of the lunch to get status of
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        - in: path
+          name: lunchId
+          schema:
+            type: string
+          required: true
+          description: GUID of the lunch to get status of
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      summary: Returns a list of suggestions for the current lunch vote
       responses:
-        "200":
+        '200':
           description: search results matching criteria
           content:
             application/json:
@@ -88,46 +87,44 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SuggestionObject'
-        "400":
+        '400':
           description: bad input parameter
   /getVoteStatus:
     get:
-      summary: Returns a list of suggestions for the current lunch vote. Note that
-        voteResults are only included if we are past the voteTime
       parameters:
-      - name: lunchId
-        in: path
-        description: GUID of the lunch to get status of
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        - in: path
+          name: lunchId
+          schema:
+            type: string
+          required: true
+          description: GUID of the lunch to get status of
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      summary: Returns a list of suggestions for the current lunch vote. Note that voteResults are only included if we are past the voteTime
       responses:
-        "200":
+        '200':
           description: search results matching criteria
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/VoteStatusObject'
+
 components:
   schemas:
     VoteStatusObject:
-      required:
-      - voteCountdown
-      - voteResults
       type: object
+      required:
+        - voteCountdown
+        - voteResults
       properties:
         voteCountdown:
           $ref: '#/components/schemas/VoteCountdownObject'
         voteResults:
           $ref: '#/components/schemas/VoteResultsObject'
     VoteCountdownObject:
-      required:
-      - timeRemaining
-      - voteTime
       type: object
+      required:
+        - voteTime
+        - timeRemaining
       properties:
         voteTime:
           type: string
@@ -136,11 +133,11 @@ components:
           type: string
           example: 4 hours, 13 minutes, 12 seconds
     VoteResultsObject:
-      required:
-      - suggestionDescription
-      - suggestionTitle
-      - voteCount
       type: object
+      required:
+        - suggestionTitle
+        - suggestionDescription
+        - voteCount
       properties:
         suggestionTitle:
           type: string
@@ -152,10 +149,10 @@ components:
           type: integer
           example: 2
     VoteObject:
-      required:
-      - acceptableChoices
-      - lunchId
       type: object
+      required:
+        - lunchId
+        - acceptableChoices
       properties:
         lunchId:
           type: string
@@ -167,24 +164,23 @@ components:
           items:
             type: integer
     VoteCreationRequestObject:
-      required:
-      - voteTime
       type: object
+      required:
+        - voteTime
       properties:
+        voteTime:
+          type: string
+          description: The date/time (Pacific Time) to count the votes, eg "12:00" or "1/1/2020 11:30"
         voteName:
           type: string
-          description: The date/time (Pacific Time) to count the votes, eg "12:00"
-            or "1/1/2020 11:30"
-        name:
-          type: string
-          description: The name of your lunchtime vote, eg "Tuesday" or "Bob's Going
-            Away Party"
+          description: The name of your lunchtime vote, eg "Tuesday" or "Bob's Going Away Party"
+
     CreateSuggestionObject:
-      required:
-      - lunchId
-      - suggestionDescription
-      - suggestionTitle
       type: object
+      required:
+        - lunchId
+        - suggestionTitle
+        - suggestionDescription
       properties:
         lunchId:
           type: string
@@ -197,12 +193,12 @@ components:
           type: string
           example: A place to eat fries
     SuggestionObject:
-      required:
-      - lunchId
-      - suggestionDescription
-      - suggestionNumber
-      - suggestionTitle
       type: object
+      required:
+        - lunchId
+        - suggestionNumber
+        - suggestionTitle
+        - suggestionDescription
       properties:
         lunchId:
           type: string

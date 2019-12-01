@@ -1,0 +1,9 @@
+Resources:
+  Function:
+    Properties:
+      CodeUri: Function
+      Handler: org.example.StreamLambdaHandler::handleRequest
+      MemorySize: 128
+      Runtime: java8
+      Timeout: 300
+    Type: AWS::Serverless::Function

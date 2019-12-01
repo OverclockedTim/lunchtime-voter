@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Jersey API - org.example::server
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+
+Resources:
+  ServerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: org.example.StreamLambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri: target/server-1.0-SNAPSHOT-lambda-package.zip
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 15
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+
+Outputs:
+  ServerApi:
+    Description: URL for application
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ping'
+    Export:
+      Name: ServerApi
