@@ -1,5 +1,5 @@
 openapi: 3.0.0
-# Added by API Auto Mocking Plugin
+# Edit link: https://app.swaggerhub.com/apis/Palantar/LunchtimeVoter/1.0.0#trial
 servers:
   - description: Lambda prod server
     url: https://peqalf7v96.execute-api.us-east-1.amazonaws.com/Prod
